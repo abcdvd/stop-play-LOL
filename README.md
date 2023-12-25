@@ -7,33 +7,38 @@
 먼저 게임 시작 후 15분 시점에 누가 이길지 예측해야 한다.
 내 생각에 이 게임의 승리를 예측하는 방법에는 3가지가 있다.
 
-### 방법
-1. 게임 시작 후 **T+10** 시점의 데이터를 가지고 승리를 예측하는 것이다.
-2. 항복 가능한 시점인 **T+15** 전까지의 **[T+5, T+10, T+15]** 5분 간격의 데이터를 RNN 계열 모델을 통해 승리를 예측하는 것이다.
-3. 항복 가능한 시점인 **T+15** 전까지의 **[1<= T <=15]** 더 촘촘한 1분 간격의 sequential 데이터를 활용하는 것이다.
+### 계획
+1. 게임 시작 후 **T+10** 시점의 데이터로 승리를 예측한다.
+2. **[1<= T <= 13]** 1분 간격의 데이터로 예측한다. 
+3. **[T+5, T+10, T+15]** 5분 간격의 데이터를 RNN 계열 모델을 통해 승리를 예측한다.
+4. **[1<= T <=15]** 더 촘촘한 1분 간격의 sequential 데이터를 활용한다.
 
-### 과정 & 결과
+### 과정
 
-1. 첫번째 방법은 이미 Kaggle에서 분석된적이 있었다. (https://www.kaggle.com/bobbyscience/league-of-legends-diamond-ranked-games-10-min). 이 데이터로는 **71%** 의 정확도를 보였다.
-
-문제는 두번째와 세번째 데이터는 공개된적이 없다는 것이다. 그래서 **Riot 공식 API**를 이용하기로 했다.
+첫번째 방법은 Kaggle에서 이미 공개된 데이터가 있지만 두번째와 세번째 데이터는 공개된적이 없다는 것이다. 그래서 **Riot 공식 API**를 이용했다.
 **Riot API**를 통해 현재 각 서버의 해당 티어에 속한 **Summoner list**들을 수집할 수 있었고 각 **Summoner**의 과거 **Match List**를 얻을 수 있었고 **MatchId**를 통해 해당 **Match**의 분단위 상세한 데이터도 얻을 수 있게 되었다.
 
 분석에 사용할 변수는 각 라인별로 레벨 차이, 골드 차이, 와드 차이를 고려할 것이다. 그 이유는 첫번째 방법을 통해 이 데이터들이 유효했음을 알기 때문이다.
 
 **Riot API**에는 **request rate limit**가 걸려 있어서 데이터를 얻을 수 있는 속도가 한정적이다. 속도를 초과하면 18초의 **Ban**을 당한다. 따라서 시간 규칙을 지켜가며 데이터를 수집했다.
 
-2. 수집한 11,348개의 match 데이터를 직접 수집 후 Kaggle에 공개했다. **75%** 정도의 정확도를 보였다.  
+
+
+### 결과
+
+1. 첫번째 방법은 이미 Kaggle에서 분석된적이 있었다. (https://www.kaggle.com/bobbyscience/league-of-legends-diamond-ranked-games-10-min). 이 데이터로는 **71%** 의 정확도를 보였다.
+
+2. 수집한 11,274개의 match 데이터를 직접 수집 후 Kaggle에 공개했다. **75%** 의 정확도를 보였다.
+   데이터 : https://www.kaggle.com/datasets/imajne/leage-of-legends-in-game-data-every-1-miniute/data   
+   LSTM 코드 : https://www.kaggle.com/code/imajne/lol-lstm-1-13min
+
+3. 수집한 11,348개의 match 데이터를 직접 수집 후 Kaggle에 공개했다. **75%** 정도의 정확도를 보였다.  
    데이터 : https://www.kaggle.com/datasets/imajne/league-of-legends-in-game-data-every-5-min/data  
    LSTM 코드 : https://www.kaggle.com/code/imajne/lol-v1-lstm-roughly-normalized
 
-3. 수집한 11,274개의 match 데이터를 직접 수집 후 Kaggle에 공개했다. **76%** 의 정확도를 보였다.   
+4. 수집한 11,274개의 match 데이터를 직접 수집 후 Kaggle에 공개했다. **76%** 의 정확도를 보였다.   
    데이터 : https://www.kaggle.com/datasets/imajne/leage-of-legends-in-game-data-every-1-miniute/data   
    LSTM 코드 : https://www.kaggle.com/code/imajne/lol-lstm-1-15min
-   
-
-
-
 
 
 ### 기록
